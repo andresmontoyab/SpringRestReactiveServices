@@ -49,15 +49,9 @@ public class RouterFunctionVendor {
                     }))
 
 
-                .andRoute(PUT("/{id}"),
+                .andRoute(method(HttpMethod.PUT),
                 request -> {
                     Flux<Vendor> vendorTOUpdated = request.bodyToFlux(Vendor.class);
-                    vendorTOUpdated
-                            .map(vendor -> {
-                                Vendor vendorToUpdate = vendor;
-                                vendorToUpdate.setId(request.pathVariable("id"));
-                                return vendorToUpdate;
-                            });
                     return ServerResponse.ok()
                             .contentType(MediaType.APPLICATION_JSON)
                             .body(vendorRepository.saveAll(vendorTOUpdated), Vendor.class);

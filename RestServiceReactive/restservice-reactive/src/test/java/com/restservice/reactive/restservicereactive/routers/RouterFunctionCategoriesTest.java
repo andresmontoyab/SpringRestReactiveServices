@@ -68,4 +68,31 @@ public class RouterFunctionCategoriesTest {
 
 
     }
+
+    @Test
+    public void updateCategoryTest() {
+        Category midCategory = new Category();
+        midCategory.setId("123");
+        midCategory.setDescription("Mid Vendor");
+
+        BDDMockito.given(categoryRepository.findById(anyString()))
+                .willReturn(Mono.just(midCategory));
+
+        webClient.put()
+                .uri("/api/v1/categories")
+                .exchange()
+                .expectBody(Category.class);
+
+    }
+
+    @Test
+    public void deleteCategoryByIdTest() {
+        BDDMockito.given(categoryRepository.deleteById(anyString()))
+                .willReturn(Mono.just(new Category()).then());
+
+        webClient.delete()
+                .uri("/api/v1/categories/1")
+                .exchange()
+                .expectStatus().isOk();
+    }
 }

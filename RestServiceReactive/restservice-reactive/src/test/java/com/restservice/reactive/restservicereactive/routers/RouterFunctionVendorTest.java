@@ -15,6 +15,7 @@ import reactor.core.publisher.Mono;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.refEq;
 
 public class RouterFunctionVendorTest {
 
@@ -75,4 +76,22 @@ public class RouterFunctionVendorTest {
                 .expectStatus().isOk();
 
     }
+
+    @Test
+    public void updateVendorTest() {
+        Vendor vendorToUpdate = new Vendor();
+        vendorToUpdate.setId("12");
+        vendorToUpdate.setFirstName("Andres");
+        vendorToUpdate.setLastName("Gaviria");
+
+        BDDMockito.given(vendorRepository.saveAll(any(Publisher.class)))
+                .willReturn(Flux.just(new Vendor()));
+
+        webTestClient.put()
+                .uri("/api/v1/vendors")
+                .body(Flux.just(vendorToUpdate), Vendor.class)
+                .exchange()
+                .expectStatus().isOk();
+    }
+
 }
